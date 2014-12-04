@@ -111,6 +111,8 @@ angular.module('ngHandsontable.directives', [])
 						},
 						function () {
 							scope.htSettings['data'] = scope.datarows;
+							scope.htSettings['mergeCells'] = scope.mergeCells;
+
 							settingFactory.updateHandsontableSettings(element, scope.htSettings);
 
 							settingFactory.renderHandsontable(element);
