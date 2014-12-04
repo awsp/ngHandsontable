@@ -7,7 +7,10 @@ Modified version of ngHandsontable to allow dynamic data binding, as well as dat
 ```js
 app.controller('HTTController', ['$scope', function ($scope) {
   $scope.hot = {};
-  $scope.hot.settings = {};
+  $scope.hot.settings = {
+    colHeaders: true,
+    rowHeaders: true
+  };
   $scope.hot.mergeCells = [
     { row: 0, col: 0, rowspan: 1, colspan: 3 }
   ];
@@ -17,6 +20,14 @@ app.controller('HTTController', ['$scope', function ($scope) {
     ['A3', 'B3', 'C3', 'D3'],
     ['A4', 'B4', 'C4', 'D4'],
   ];
+
+  // Change merged cells 2 seconds after.
+  setTimeout(function () {
+    $scope.hot.mergeCells = [
+      { row: 1, col: 1, rowspan: 2, colspan: 1 },
+      { row: 0, col: 2, rowspan: 2, colspan: 2 }
+    ];
+  }, 2000);
 }])
 
 <hot mergeCells="hot.mergeCells" datarows="hot.data" settings="hot.settings"></hot>
