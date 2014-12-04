@@ -2,6 +2,28 @@
 
 Enables creation of data grid applications in AngularJS.
 
+## Note
+Modified version of ngHandsontable to allow dynamic data binding, as well as data-binding on merge cells.
+```js
+app.controller('HTTController', ['$scope', function ($scope) {
+  $scope.hot = {};
+  $scope.hot.settings = {};
+  $scope.hot.mergeCells = [
+    { row: 0, col: 0, rowspan: 1, colspan: 3 }
+  ];
+  $scope.data = [
+    ['A1', 'B1', 'C1', 'D1'],
+    ['A2', 'B2', 'C2', 'D2'],
+    ['A3', 'B3', 'C3', 'D3'],
+    ['A4', 'B4', 'C4', 'D4'],
+  ];
+}])
+
+<hot mergeCells="hot.mergeCells" datarows="hot.data" settings="hot.settings"></hot>
+...
+```
+
+
 ## Demo
 
 See the demo at http://handsontable.github.io/ngHandsontable
@@ -72,11 +94,11 @@ $scope.db.items = [
   //more items go here
 ];
 ```
-  
+
 ## Directives and attributes specification
 
 All **Handsontable** options listed [here](https://github.com/handsontable/jquery-handsontable/wiki) should be supported
-  
+
  Directive                       | Attribute&nbsp;&nbsp;&nbsp; | Description
  --------------------------------|-----------------------------|-------------
  **&lt;div hot-table&gt;**       |                             | Defines the grid container. Can also be declared as element `<ui-handsontable>`

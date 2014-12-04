@@ -4,7 +4,7 @@
  * Copyright 2012-2014 Marcin Warpechowski
  * Licensed under the MIT license.
  * https://github.com/handsontable/ngHandsontable
- * Date: Wed Oct 01 2014 23:36:56 GMT+0200 (CEST)
+ * Date: Wed Dec 03 2014 17:38:22 GMT-1000 (HST)
 */
 
 if (document.all && !document.addEventListener) { // IE 8 and lower
@@ -49,7 +49,20 @@ angular.module('ngHandsontable.services', [])
 				 */
 				updateHandsontableSettings: function (element, settings) {
 					var container = $(element).find('.' + this.containerClassName);
+					var mergeCells = null;
+					if (settings.mergeCells) {
+						mergeCells = settings.mergeCells;
+						delete settings.mergeCells;
+					}
+
 					container.handsontable('updateSettings', settings);
+
+					// Merge Cells
+					if (mergeCells) {
+						var htt = container.data('handsontable');
+						htt.mergeCells = new Handsontable.MergeCells(mergeCells);
+						htt.render();
+					}
 				},
 
 				/***
@@ -162,6 +175,9 @@ angular.module('ngHandsontable.directives', [])
 				publicHooks = Object.keys(Handsontable.PluginHooks.hooks),
 				htOptions = publicProperties.concat(publicHooks);
 
+			// Quick hack, allow mergeCells, default not exists in Handsontable.DefaultSettings.prototype
+      		htOptions.push('mergeCells');
+
 			return {
 				restrict: 'EA',
 				scope: settingFactory.getScopeDefinition(htOptions),
@@ -181,6 +197,7 @@ angular.module('ngHandsontable.directives', [])
 						scope.htSettings = {};
 					}
 					scope.htSettings['data'] = scope.datarows;
+					scope.htSettings['mergeCells'] = scope.mergeCells;
 
 					angular.extend(scope.htSettings, settingFactory.setHandsontableSettingsFromScope(htOptions, scope));
 
@@ -255,6 +272,9 @@ angular.module('ngHandsontable.directives', [])
 							return angular.toJson([objToCheck]);
 						},
 						function () {
+							scope.htSettings['data'] = scope.datarows;
+							settingFactory.updateHandsontableSettings(element, scope.htSettings);
+
 							settingFactory.renderHandsontable(element);
 						});
 

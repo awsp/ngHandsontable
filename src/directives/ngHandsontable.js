@@ -13,6 +13,9 @@ angular.module('ngHandsontable.directives', [])
 				publicHooks = Object.keys(Handsontable.PluginHooks.hooks),
 				htOptions = publicProperties.concat(publicHooks);
 
+			// Quick hack, allow mergeCells, default not exists in Handsontable.DefaultSettings.prototype
+      		htOptions.push('mergeCells');
+
 			return {
 				restrict: 'EA',
 				scope: settingFactory.getScopeDefinition(htOptions),
@@ -32,6 +35,7 @@ angular.module('ngHandsontable.directives', [])
 						scope.htSettings = {};
 					}
 					scope.htSettings['data'] = scope.datarows;
+					scope.htSettings['mergeCells'] = scope.mergeCells;
 
 					angular.extend(scope.htSettings, settingFactory.setHandsontableSettingsFromScope(htOptions, scope));
 
@@ -108,7 +112,7 @@ angular.module('ngHandsontable.directives', [])
 						function () {
 							scope.htSettings['data'] = scope.datarows;
 							settingFactory.updateHandsontableSettings(element, scope.htSettings);
-							
+
 							settingFactory.renderHandsontable(element);
 						});
 

@@ -29,7 +29,20 @@ angular.module('ngHandsontable.services', [])
 				 */
 				updateHandsontableSettings: function (element, settings) {
 					var container = $(element).find('.' + this.containerClassName);
+					var mergeCells = null;
+					if (settings.mergeCells) {
+						mergeCells = settings.mergeCells;
+						delete settings.mergeCells;
+					}
+
 					container.handsontable('updateSettings', settings);
+
+					// Merge Cells
+					if (mergeCells) {
+						var htt = container.data('handsontable');
+						htt.mergeCells = new Handsontable.MergeCells(mergeCells);
+						htt.render();
+					}
 				},
 
 				/***
